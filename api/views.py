@@ -45,7 +45,7 @@ def coba_route(request):
 
 @api_view(['GET'])
 def ambil_catatan(request):
-    catatan = Catatan.objects.all()  #ambil data dari basis data
+    catatan = Catatan.objects.all().order_by('-waktu_terakhir_diedit')  #ambil data dari basis data
     serializer = SerializerCatatan(catatan,many=True) # serializerkan
     return Response(serializer.data) #
 
@@ -55,3 +55,20 @@ def ambil_catatan_tunggal(request,pk):
     serializer = SerializerCatatan(catatan,many=False) # serializerkan
     return Response(serializer.data) #
 
+@api_view(['PUT'])
+def perbaharui_catatan(request,pk):
+
+    data = request.data 
+    catatan = Catatan.objects.get(id=pk)
+    serializer = SerializerCatatan(instance=catatan,data=data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def hapus_catatan(request,pk):
+    note = Catatan.objects.get(id=pk)
+    note.delete()
+    return Response('Catatan Telah Terhapus')
