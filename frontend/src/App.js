@@ -11,7 +11,7 @@ function App() {
         <div className="app">
           <Header />
           <Route path="/" exact component={NoteListPage} />
-          <Route path="/note/:id" component={NotePage} />
+          <Route path="/catatan/:id" component={NotePage} />
         </div>
       </div>
     </Router>

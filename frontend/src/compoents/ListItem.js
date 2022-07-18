@@ -7,7 +7,7 @@ const ListItem = ({ note }) => {
   untuk ngeroute ke link satuan
   */
   return (
-    <Link to={`/note/${note.id}`}>
+    <Link to={`/catatan/${note.id}`}>
       <div className="notes-list-item">
         <h3>{note.isi}</h3>
       </div>

@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Catatan
 from .serializer import SerializerCatatan
+from api import serializer
 # Create your views here.
 
 @api_view(['GET'])
@@ -48,6 +49,16 @@ def ambil_catatan(request):
     catatan = Catatan.objects.all().order_by('-waktu_terakhir_diedit')  #ambil data dari basis data
     serializer = SerializerCatatan(catatan,many=True) # serializerkan
     return Response(serializer.data) #
+
+@api_view(['POST'])
+def buat_catatan(request):
+    data = request.data
+    catatan = Catatan.objects.create(
+        isi= data['isi']
+    )
+    serializer = SerializerCatatan(catatan,many=False)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 def ambil_catatan_tunggal(request,pk):

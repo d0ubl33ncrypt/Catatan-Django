@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ReactComponent as ArrowLeft } from "../assets/left.svg";
-import { Link } from "react-router-dom";
 
 const NotePage = ({ match, history }) => {
   let noteId = match.params.id;
@@ -11,9 +10,20 @@ const NotePage = ({ match, history }) => {
   }, [noteId]);
 
   let ambil_catatan = async () => {
+    if (noteId === "baru") return;
     let response = await fetch(`/api/catatan/${noteId}/`);
     let data = await response.json();
     setNote(data);
+  };
+
+  let CreateNote = async () => {
+    fetch(`/api/catatan/buat/`, {
+      method: "POST",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify(note),
+    });
   };
 
   let updateNote = async () => {
@@ -41,31 +51,49 @@ const NotePage = ({ match, history }) => {
     history.push("/");
   };
 
-  let HandleSubmit = () => {
+  let handleSubmit = () => {
     /*
-    fungsi untuk memaanggil fungsi update saat menekan tombol
-    dan kembalikan laman awal
+    
     */
-    updateNote();
+    console.log("NOTE: ", note.isi);
+    if (noteId !== "baru" && note.isi === "") {
+      deleteNote();
+    } else if (noteId !== "baru") {
+      updateNote();
+    } else if (noteId === "baru" && note.isi !== null) {
+      CreateNote();
+    }
     history.push("/");
+  };
+
+  let handleChange = (value) => {
+    setNote(note => ({...note,isi: value }));
+    console.log("Handle Change: ", note.isi);
   };
 
   return (
     <div className="note">
       <div className="note-header">
         <h3>
-          <ArrowLeft onClick={HandleSubmit} />
+          <ArrowLeft onClick={handleSubmit} />
         </h3>
-        <button onClick={deleteNote}>Hapus</button>
+
+        {noteId !== "baru" ? (
+          <button onClick={deleteNote}>Hapus</button>
+        ) : (
+          <button onClick={handleSubmit}>Done</button>
+        )}
       </div>
+
       <textarea
         onChange={(e) => {
-          setNote({ ...note, isi: e.target.value });
+          handleChange(e.target.value);
         }}
-        defaultValue={note?.isi}
+        value={note?.isi}
       ></textarea>
     </div>
   );
 };
 
 export default NotePage;
+
