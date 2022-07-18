@@ -17,7 +17,7 @@ const NotePage = ({ match, history }) => {
   };
 
   let CreateNote = async () => {
-    fetch(`/api/catatan/buat/`, {
+    fetch(`/api/catatan/`, {
       method: "POST",
       headers: {
         "content-Type": "application/json",
@@ -32,7 +32,7 @@ const NotePage = ({ match, history }) => {
     memanggil metode put
     serta memperbaharui isi
     */
-    fetch(`/api/catatan/${noteId}/perbaharui/`, {
+    fetch(`/api/catatan/${noteId}/`, {
       method: "PUT",
       headers: {
         "content-Type": "application/json",
@@ -42,7 +42,7 @@ const NotePage = ({ match, history }) => {
   };
 
   let deleteNote = async () => {
-    fetch(`/api/catatan/${noteId}/hapus/`, {
+    fetch(`/api/catatan/${noteId}/`, {
       method: "DELETE",
       headers: {
         "content-Type": "application/json",
